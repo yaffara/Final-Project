@@ -1,0 +1,20 @@
+# Assignment 4 by Yusif
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = "all"
+# Here is all of the files that I have got from the 4 teams I selected. Lions, Cheifs, Bills, and 49ers and load it in.
+import pandas as pd
+
+lions = pd.read_csv(r"C:\Users\yaffa\Downloads\Yusif's Info\Masters(Spring)\lions.csv", index_col='Player')
+chiefs = pd.read_csv(r"C:\Users\yaffa\Downloads\Yusif's Info\Masters(Spring)\chiefs.csv", index_col='Player')
+niners = pd.read_csv(r"C:\Users\yaffa\Downloads\Yusif's Info\Masters(Spring)\49ers.csv", index_col='Player')
+bills = pd.read_csv(r"C:\Users\yaffa\Downloads\Yusif's Info\Masters(Spring)\bills.csv", index_col='Player')
+
+# This is what makes all the tables combine into one file called all teams roster
+all_rosters_df = pd.concat([lions_df, chiefs_df, niners_df, bills_df], axis=0)
+all_rosters_df.to_csv('all_teams_rosters_2019.csv', index=True)
+print(all_rosters_df.head())
+all_teams = pd.concat([lions, chiefs, niners, bills])
+all_teams.head()
+
+# Save the combined table to a CSV (index included)
+all_teams.to_csv("nfl_2023_rosters.csv")
