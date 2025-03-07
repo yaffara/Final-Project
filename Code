@@ -1,0 +1,64 @@
+##Yusif affara final project
+# link to data https://www.pro-football-reference.com/years/2024/
+# imports
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Here is my data set from link to data https://www.pro-football-reference.com/years/2024/
+file_path = r"C:\Users\yaffa\Downloads\Yusif's Info\Masters(Spring)\Finaldata.xlsx"
+df = pd.read_excel(file_path)
+
+
+# This removes any special characters from team names (e.g., * and +)
+df['Tm'] = df['Tm'].str.replace(r'[\*\+]', '', regex=True)
+
+# Convert 'W-L%' to float for analysis
+df['W-L%'] = df['W-L%'].astype(float)
+
+
+
+# scatter Plot of MoV vs SRS (Margin of Victory vs Simple Rating System)
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='SRS', y='MoV', data=df)
+plt.title('Margin of Victory vs Simple Rating System')
+plt.xlabel('Simple Rating System (SRS)')
+plt.ylabel('Margin of Victory (MoV)')
+plt.show()
+
+# Display correlation between performance metrics
+corr_matrix = df[['W-L%', 'PF', 'PA', 'MoV', 'SoS', 'SRS', 'OSRS', 'DSRS']].corr()
+
+
+plt.figure(figsize=(10, 6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Heatmap of NFL Metrics')
+plt.show()
+
+# Bar Chart for Team Performance (Win-Loss%, OSRS, DSRS)
+# Compare win-loss percentage and offensive/defensive ratings
+plt.figure(figsize=(12, 8))
+df_sorted = df.sort_values('W-L%', ascending=False)
+
+# Bar chart comparing Win-Loss%, OSRS, and DSRS
+sns.barplot(x='W-L%', y='Tm', data=df_sorted, palette='Blues_d')
+sns.barplot(x='OSRS', y='Tm', data=df_sorted, palette='Reds_d', alpha=0.5)
+sns.barplot(x='DSRS', y='Tm', data=df_sorted, palette='Greens_d', alpha=0.5)
+
+plt.title('Team Performance (Win-Loss%, OSRS, DSRS)')
+plt.xlabel('Metrics')
+plt.ylabel('Team')
+plt.legend()
+plt.show()
+
+# 4. Interactive Component: Search for a Team and Display Stats
+team_name = input("Enter the team name: ")
+
+# Finds the team in the dataset and display its stats
+team_stats = df[df['Tm'].str.contains(team_name, case=False)]
+
+if team_stats.empty:
+    print(f"Team '{team_name}' not found.")
+else:
+    print(f"Stats for {team_name}:")
+    print(team_stats[['Tm', 'W-L%', 'PF', 'PA', 'MoV', 'SoS', 'SRS', 'OSRS', 'DSRS']])
